@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Database Condizionatori – Termocinque</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --t5-black: #111111;
+      --t5-gray: #6b7280;
+      --t5-light: #f8f9fa;
+      --t5-border: #e5e7eb;
+      --t5-green: #16a34a;
+    }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      color: #1f2937;
+      background: #f3f4f6;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid var(--t5-border);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .label {
+      font-size: 13px;
+      font-weight: 500;
+      color: #6b7280;
+      letter-spacing: 0.01em;
+      margin-bottom: 4px;
+    }
+    .value {
+      font-size: 17px;
+      font-weight: 500;
+      color: #111;
+    }
+    .suggestion-item:hover, .suggestion-item.active {
+      background-color: #f0fdf4;
+    }
+    .ui-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      font-size: 14px;
+      font-weight: 500;
+      background: #ecfdf5;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+    input, select {
+      font-size: 16px !important;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #16a34a;
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
+    }
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #111;
+      color: white;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- HEADER -->
+  <header class="bg-white border-b border-gray-200">
+    <div class="max-w-5xl mx-auto px-5 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 bg-black text-white flex items-center justify-center font-bold text-sm tracking-tight">T5</div>
+        <div>
+          <div class="font-semibold text-[15px] tracking-tight text-gray-900">TERMOCINQUE</div>
+          <div class="text-xs text-gray-400 -mt-0.5">Database Condizionatori</div>
+        </div>
+      </div>
+      <button id="btnAdmin" class="text-sm font-medium text-gray-600 hover:text-black transition px-3 py-1.5 rounded-lg hover:bg-gray-100">
+        Admin
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-5 py-10">
+
+    <div class="mb-10">
+      <h1 class="text-2xl font-semibold text-gray-900 tracking-tight">Ricerca dati tecnici</h1>
+      <p class="text-gray-500 mt-1.5 text-[15px]">Seleziona l’unità esterna e poi le unità interne</p>
+    </div>
+
+    <!-- STEP 1: UNITÀ ESTERNA -->
+    <div class="card p-6 mb-5">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="step-num">1</div>
+        <h2 class="font-semibold text-gray-900 text-[17px]">Unità Esterna</h2>
+      </div>
+
+      <div class="relative">
+        <input id="searchEsterna" type="text"
+               placeholder="Cerca marca o modello (es. 2MXF40, Daikin…)"
+               class="w-full pl-11 pr-4 py-3.5 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white transition"
+               autocomplete="off" />
+        <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <div id="suggestionsEsterna" class="absolute z-30 w-full mt-1.5 bg-white border border-gray-200 rounded-xl shadow-lg hidden max-h-64 overflow-y-auto"></div>
+      </div>
+
+      <div id="selectedEsterna" class="hidden mt-4 p-4 bg-emerald-50 border border-emerald-100 rounded-xl flex items-center justify-between">
+        <div>
+          <div class="text-xs font-medium text-emerald-700 uppercase tracking-wide">Selezionata</div>
+          <div id="selEsternaText" class="text-[17px] font-semibold text-emerald-900 mt-0.5"></div>
+        </div>
+        <button id="btnClearEsterna" class="text-sm font-medium text-emerald-700 hover:text-emerald-900 px-3 py-1.5 rounded-lg hover:bg-emerald-100 transition">
+          Cambia
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 2: UNITÀ INTERNE -->
+    <div id="step2" class="card p-6 mb-5 opacity-40 pointer-events-none transition-opacity">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="step-num">2</div>
+        <h2 class="font-semibold text-gray-900 text-[17px]">Unità Interne <span class="text-gray-400 font-normal text-[15px]">(fino a 5)</span></h2>
+      </div>
+
+      <div id="uiChips" class="flex flex-wrap gap-2 mb-4 min-h-[36px]"></div>
+
+      <div class="relative">
+        <input id="searchInterna" type="text" placeholder="Aggiungi unità interna…"
+               class="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white transition"
+               autocomplete="off" disabled />
+        <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        <div id="suggestionsInterna" class="absolute z-30 w-full mt-1.5 bg-white border border-gray-200 rounded-xl shadow-lg hidden max-h-52 overflow-y-auto"></div>
+      </div>
+      <p class="text-[13px] text-gray-400 mt-2.5">Seleziona le unità una alla volta. L’ordine non è rilevante.</p>
+    </div>
+
+    <!-- RISULTATO -->
+    <div id="resultCard" class="hidden card overflow-hidden">
+      <div class="bg-black text-white px-6 py-5">
+        <div class="text-xs font-medium text-gray-400 uppercase tracking-wider">Combinazione trovata</div>
+        <div id="resTitle" class="text-xl font-semibold mt-1 tracking-tight"></div>
+      </div>
+      <div class="p-6 grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-5">
+        <div>
+          <div class="label">Marca</div>
+          <div id="resMarca" class="value"></div>
+        </div>
+        <div>
+          <div class="label">Unità Esterna</div>
+          <div id="resEsterna" class="value"></div>
+        </div>
+        <div>
+          <div class="label">Unità Interne</div>
+          <div id="resInterne" class="value"></div>
+        </div>
+        <div>
+          <div class="label">Tipologia gas</div>
+          <div id="resGas" class="value text-emerald-700"></div>
+        </div>
+        <div>
+          <div class="label">Quantitativo gas</div>
+          <div id="resQty" class="value text-emerald-700"></div>
+        </div>
+        <div>
+          <div class="label">Potenza riscaldamento</div>
+          <div id="resPotenza" class="value"></div>
+        </div>
+        <div>
+          <div class="label">COP</div>
+          <div id="resCop" class="value"></div>
+        </div>
+        <div>
+          <div class="label">EER</div>
+          <div id="resEer" class="value"></div>
+        </div>
+        <div>
+          <div class="label">SCOP</div>
+          <div id="resScop" class="value"></div>
+        </div>
+        <div>
+          <div class="label">SEER</div>
+          <div id="resSeer" class="value"></div>
+        </div>
+        <div>
+          <div class="label">Denominazione</div>
+          <div id="resDenom" class="value"></div>
+        </div>
+        <div>
+          <div class="label">Inverter / Reversibile</div>
+          <div id="resInvRev" class="value"></div>
+        </div>
+        <div>
+          <div class="label">Superficie utile</div>
+          <div id="resSup" class="value"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="noResult" class="hidden text-center py-12">
+      <p class="text-gray-500 text-[16px]">Nessuna combinazione trovata con queste unità interne.</p>
+      <p class="text-gray-400 text-sm mt-1">Prova a modificare la selezione.</p>
+    </div>
+
+  </main>
+
+  <!-- TOAST -->
+  <div id="toast" class="fixed bottom-6 right-6 bg-black text-white px-5 py-3.5 rounded-xl shadow-lg text-[15px] hidden z-50"></div>
+
+  <!-- MODAL LOGIN -->
+  <div id="modalLogin" class="fixed inset-0 bg-black/40 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-7">
+      <h2 class="text-xl font-semibold text-gray-900 mb-5">Accesso Admin</h2>
+      <input id="adminPassword" type="password" placeholder="Password"
+             class="w-full border border-gray-200 rounded-xl px-4 py-3.5 mb-5 bg-gray-50" />
+      <div class="flex gap-3">
+        <button id="btnLoginCancel" class="flex-1 py-3 rounded-xl border border-gray-200 font-medium text-gray-700 hover:bg-gray-50 transition">Annulla</button>
+        <button id="btnLoginConfirm" class="flex-1 py-3 rounded-xl bg-black text-white font-medium hover:bg-gray-800 transition">Entra</button>
+      </div>
+      <p id="loginError" class="text-red-500 text-sm mt-4 hidden text-center">Password errata</p>
+    </div>
+  </div>
+
+  <!-- MODAL ADMIN -->
+  <div id="modalAdmin" class="fixed inset-0 bg-black/40 z-50 hidden overflow-y-auto backdrop-blur-sm">
+    <div class="min-h-screen flex items-start justify-center p-4 py-10">
+      <div class="bg-white rounded-2xl shadow-xl w-full max-w-4xl">
+        <div class="px-7 py-5 border-b border-gray-100 flex items-center justify-between">
+          <h2 class="text-xl font-semibold text-gray-900">Gestione Database</h2>
+          <button id="btnCloseAdmin" class="w-9 h-9 rounded-full hover:bg-gray-100 flex items-center justify-center text-2xl text-gray-400 hover:text-gray-700 transition">&times;</button>
+        </div>
+
+        <div class="p-7">
+          <!-- Stats -->
+          <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="p-5 bg-gray-50 rounded-xl">
+              <div class="text-sm text-gray-500 font-medium">Unità Esterne</div>
+              <div id="countEsterne" class="text-3xl font-semibold text-gray-900 mt-1">—</div>
+            </div>
+            <div class="p-5 bg-gray-50 rounded-xl">
+              <div class="text-sm text-gray-500 font-medium">Combinazioni</div>
+              <div id="countComb" class="text-3xl font-semibold text-gray-900 mt-1">—</div>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-3 mb-8">
+            <button id="btnShowAdd" class="px-5 py-2.5 bg-black text-white rounded-xl text-[15px] font-medium hover:bg-gray-800 transition">
+              + Nuova combinazione
+            </button>
+            <button id="btnRefreshAdmin" class="px-5 py-2.5 border border-gray-200 rounded-xl text-[15px] font-medium hover:bg-gray-50 transition">
+              Aggiorna dati
+            </button>
+          </div>
+
+          <!-- FORM NUOVA COMBINAZIONE -->
+          <div id="formAdd" class="hidden mb-8 p-6 bg-gray-50 rounded-2xl border border-gray-100">
+            <h3 class="font-semibold text-gray-900 text-lg mb-5">Nuova combinazione</h3>
+
+            <!-- Esterna -->
+            <div class="mb-5">
+              <div class="label">Unità Esterna *</div>
+              <div class="relative">
+                <input id="addEsternaSearch" type="text" placeholder="Cerca unità esterna…"
+                       class="w-full border border-gray-200 rounded-xl px-4 py-3 bg-white" autocomplete="off" />
+                <div id="addEsternaSuggestions" class="absolute z-20 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg hidden max-h-48 overflow-y-auto"></div>
+              </div>
+              <div id="addSelectedEsterna" class="hidden mt-2 text-[15px] font-medium text-emerald-700"></div>
+            </div>
+
+            <!-- Interne -->
+            <div class="mb-5">
+              <div class="label">Unità Interne (fino a 5)</div>
+              <div id="addUiChips" class="flex flex-wrap gap-2 mb-2 min-h-[32px]"></div>
+              <input id="addInternaInput" type="text" placeholder="Scrivi modello unità interna e premi Invio"
+                     class="w-full border border-gray-200 rounded-xl px-4 py-3 bg-white" />
+            </div>
+
+            <!-- Dati tecnici -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-5">
+              <div>
+                <div class="label">Potenza riscaldamento</div>
+                <input id="addPotenza" type="number" step="0.01" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 bg-white" />
+              </div>
+              <div>
+                <div class="label">COP</div>
+                <input id="addCop" type="number" step="0.01" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 bg-white" />
+              </div>
+              <div>
+                <div class="label">EER</div>
+                <input id="addEer" type="number" step="0.01" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 bg-white" />
+              </div>
+              <div>
+                <div class="label">SCOP</div>
+                <input id="addScop" type="number" step="0.01" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 bg-white" />
+              </div>
+              <div>
+                <div class="label">SEER</div>
+                <input id="addSeer" type="number" step="0.01" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 bg-white" />
+              </div>
+              <div>
+                <div class="label">Superficie utile</div>
+                <input id="addSup" type="number" step="0.01" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 bg-white" />
+              </div>
+              <div>
+                <div class="label">Denominazione</div>
+                <input id="addDenom" type="text" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 bg-white" placeholder="es. Split/Multisplit" />
+              </div>
+              <div>
+                <div class="label">Inverter</div>
+                <select id="addInverter" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 bg-white">
+                  <option value="Si">Si</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+              <div>
+                <div class="label">Reversibile</div>
+                <select id="addReversibile" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 bg-white">
+                  <option value="Si">Si</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="flex gap-3">
+              <button id="btnSaveModel" class="px-6 py-2.5 bg-black text-white rounded-xl font-medium hover:bg-gray-800 transition">Salva</button>
+              <button id="btnCancelAdd" class="px-6 py-2.5 border border-gray-200 rounded-xl font-medium hover:bg-gray-50 transition">Annulla</button>
+            </div>
+          </div>
+
+          <p class="text-sm text-gray-400">
+            Per modificare unità esterne (gas e quantità) usa direttamente il foglio Google <strong>Unita_Esterne</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbzcoL_Fn0v5EkDrez9SD9h3bPkVwXxUxhbm0gsyN6y6Kzas4nyEofmWeHsFThjzJWEC/exec";
+    let esterne = [];
+    let combinazioni = [];
+    let selectedEsterna = null;
+    let selectedUIs = [];
+    let addSelectedEsterna = null;
+    let addUIs = [];
+    let ADMIN_PASSWORD = "";
+
+    // ===== UTILS =====
+    function fmt(val) {
+      if (val === null || val === undefined || val === "" || val === "N/D") return "—";
+      const n = Number(val);
+      if (isNaN(n)) return String(val);
+      return n.toFixed(2).replace(/\.?0+$/, match => match === ".00" ? ".00" : match.replace(/0+$/, "")).replace(/\.$/, "");
+      // sempre max 2 decimali, toglie zeri inutili ma mantiene .00 se intero? meglio forzare 2
+    }
+    function fmt2(val) {
+      if (val === null || val === undefined || val === "" || val === "N/D") return "—";
+      const n = Number(val);
+      if (isNaN(n)) return String(val);
+      return n.toFixed(2);
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.remove("hidden");
+      setTimeout(() => t.classList.add("hidden"), 2800);
+    }
+
+    function esc(s) { return String(s || "").replace(/"/g, "&quot;"); }
+
+    async function api(action, body = null, password = null) {
+      const url = new URL(API_URL);
+      const opts = { method: body ? "POST" : "GET" };
+      if (body) {
+        opts.headers = { "Content-Type": "text/plain" };
+        opts.body = JSON.stringify({ ...body, action, password });
+      } else {
+        url.searchParams.set("action", action);
+      }
+      const res = await fetch(url.toString(), opts);
+      return res.json();
+    }
+
+    async function loadData() {
+      try {
+        const res = await api("get");
+        if (res.success) {
+          esterne = res.esterne || [];
+          combinazioni = res.combinazioni || [];
+          document.getElementById("countEsterne").textContent = esterne.length;
+          document.getElementById("countComb").textContent = combinazioni.length;
+        } else {
+          showToast(res.error || "Errore caricamento");
+        }
+      } catch (e) {
+        console.error(e);
+        showToast("Errore di connessione");
+      }
+    }
+
+    // ===== RICERCA ESTERNA =====
+    const searchEsterna = document.getElementById("searchEsterna");
+    const suggestionsEsterna = document.getElementById("suggestionsEsterna");
+
+    searchEsterna.addEventListener("input", () => {
+      const q = searchEsterna.value.trim().toLowerCase();
+      if (q.length < 1) { suggestionsEsterna.classList.add("hidden"); return; }
+      const matches = esterne.filter(e => {
+        return String(e["Marca"]||"").toLowerCase().includes(q) ||
+               String(e["Unità Esterna"]||"").toLowerCase().includes(q);
+      }).slice(0, 12);
+
+      suggestionsEsterna.innerHTML = matches.length === 0
+        ? `<div class="px-4 py-3 text-gray-400 text-[15px]">Nessun risultato</div>`
+        : matches.map(e => `
+          <div class="suggestion-item px-4 py-3 cursor-pointer text-[15px] border-b border-gray-50 last:border-0"
+               data-marca="${esc(e["Marca"])}" data-unita="${esc(e["Unità Esterna"])}">
+            <span class="font-medium">${e["Marca"]||""}</span>
+            <span class="text-gray-500"> · ${e["Unità Esterna"]||""}</span>
+          </div>`).join("");
+      suggestionsEsterna.classList.remove("hidden");
+    });
+
+    suggestionsEsterna.addEventListener("click", e => {
+      const item = e.target.closest(".suggestion-item");
+      if (!item) return;
+      const found = esterne.find(x => x["Marca"] === item.dataset.marca && x["Unità Esterna"] === item.dataset.unita);
+      if (found) selectEsterna(found);
+    });
+
+    function selectEsterna(e) {
+      selectedEsterna = e;
+      selectedUIs = [];
+      searchEsterna.value = "";
+      suggestionsEsterna.classList.add("hidden");
+      document.getElementById("selectedEsterna").classList.remove("hidden");
+      document.getElementById("selEsternaText").textContent = `${e["Marca"]} ${e["Unità Esterna"]}`;
+      document.getElementById("step2").classList.remove("opacity-40", "pointer-events-none");
+      document.getElementById("searchInterna").disabled = false;
+      renderUIChips();
+      tryFindCombination();
+    }
+
+    document.getElementById("btnClearEsterna").addEventListener("click", () => {
+      selectedEsterna = null;
+      selectedUIs = [];
+      document.getElementById("selectedEsterna").classList.add("hidden");
+      document.getElementById("step2").classList.add("opacity-40", "pointer-events-none");
+      document.getElementById("searchInterna").disabled = true;
+      document.getElementById("resultCard").classList.add("hidden");
+      document.getElementById("noResult").classList.add("hidden");
+      renderUIChips();
+    });
+
+    // ===== UNITÀ INTERNE =====
+    const searchInterna = document.getElementById("searchInterna");
+    const suggestionsInterna = document.getElementById("suggestionsInterna");
+
+    searchInterna.addEventListener("input", () => {
+      if (!selectedEsterna) return;
+      const q = searchInterna.value.trim().toLowerCase();
+      const possible = new Set();
+      combinazioni
+        .filter(c => c["Marca"] === selectedEsterna["Marca"] && c["Unità Esterna"] === selectedEsterna["Unità Esterna"])
+        .forEach(c => {
+          ["UI1","UI2","UI3","UI4","UI5"].forEach(k => { if (c[k]) possible.add(String(c[k]).trim()); });
+        });
+      let list = Array.from(possible).filter(ui => !selectedUIs.includes(ui));
+      if (q) list = list.filter(ui => ui.toLowerCase().includes(q));
+      list = list.slice(0, 12);
+
+      suggestionsInterna.innerHTML = list.length === 0
+        ? `<div class="px-4 py-3 text-gray-400 text-[15px]">Nessuna unità disponibile</div>`
+        : list.map(ui => `<div class="suggestion-item px-4 py-2.5 cursor-pointer text-[15px]" data-ui="${esc(ui)}">${ui}</div>`).join("");
+      suggestionsInterna.classList.remove("hidden");
+    });
+
+    searchInterna.addEventListener("focus", () => searchInterna.dispatchEvent(new Event("input")));
+
+    suggestionsInterna.addEventListener("click", e => {
+      const item = e.target.closest(".suggestion-item");
+      if (!item) return;
+      if (selectedUIs.length >= 5) { showToast("Massimo 5 unità interne"); return; }
+      selectedUIs.push(item.dataset.ui);
+      searchInterna.value = "";
+      suggestionsInterna.classList.add("hidden");
+      renderUIChips();
+      tryFindCombination();
+    });
+
+    function renderUIChips() {
+      document.getElementById("uiChips").innerHTML = selectedUIs.map((ui, i) => `
+        <span class="ui-chip">${ui}<button onclick="removeUI(${i})" class="hover:text-red-600 text-base leading-none">&times;</button></span>
+      `).join("");
+    }
+    window.removeUI = function(i) {
+      selectedUIs.splice(i, 1);
+      renderUIChips();
+      tryFindCombination();
+    };
+
+    // ===== TROVA COMBINAZIONE =====
+    function tryFindCombination() {
+      document.getElementById("resultCard").classList.add("hidden");
+      document.getElementById("noResult").classList.add("hidden");
+      if (!selectedEsterna || selectedUIs.length === 0) return;
+
+      const selectedSorted = [...selectedUIs].map(s => s.trim().toLowerCase()).sort().join("|");
+      const match = combinazioni.find(c => {
+        if (c["Marca"] !== selectedEsterna["Marca"] || c["Unità Esterna"] !== selectedEsterna["Unità Esterna"]) return false;
+        const combUIs = ["UI1","UI2","UI3","UI4","UI5"]
+          .map(k => String(c[k]||"").trim()).filter(Boolean)
+          .map(s => s.toLowerCase()).sort().join("|");
+        return combUIs === selectedSorted;
+      });
+
+      if (match) showResult(match);
+      else document.getElementById("noResult").classList.remove("hidden");
+    }
+
+    function showResult(c) {
+      document.getElementById("resultCard").classList.remove("hidden");
+      document.getElementById("resTitle").textContent = `${c["Marca"]} ${c["Unità Esterna"]} + ${selectedUIs.join(" + ")}`;
+      document.getElementById("resMarca").textContent = c["Marca"] || "—";
+      document.getElementById("resEsterna").textContent = c["Unità Esterna"] || "—";
+      document.getElementById("resInterne").textContent = selectedUIs.join(", ") || "—";
+      document.getElementById("resGas").textContent = selectedEsterna["Tipologia gas"] || "—";
+      document.getElementById("resQty").textContent = selectedEsterna["Quantitativo gas"] || "—";
+      document.getElementById("resPotenza").textContent = fmt2(c["Potenza riscaldamento"]);
+      document.getElementById("resCop").textContent = fmt2(c["COP"]);
+      document.getElementById("resEer").textContent = fmt2(c["EER"]);
+      document.getElementById("resScop").textContent = fmt2(c["SCOP"]);
+      document.getElementById("resSeer").textContent = fmt2(c["SEER"]);
+      document.getElementById("resDenom").textContent = c["Denominazione"] || "—";
+      document.getElementById("resInvRev").textContent = `${c["Inverter"] || "—"} / ${c["Reversibile"] || "—"}`;
+      document.getElementById("resSup").textContent = fmt2(c["Superficie utile"]);
+    }
+
+    // ===== ADMIN =====
+    document.getElementById("btnAdmin").addEventListener("click", () => {
+      document.getElementById("modalLogin").classList.remove("hidden");
+      document.getElementById("modalLogin").classList.add("flex");
+      document.getElementById("adminPassword").value = "";
+      document.getElementById("loginError").classList.add("hidden");
+    });
+    document.getElementById("btnLoginCancel").addEventListener("click", () => {
+      document.getElementById("modalLogin").classList.add("hidden");
+      document.getElementById("modalLogin").classList.remove("flex");
+    });
+    document.getElementById("btnLoginConfirm").addEventListener("click", async () => {
+      const pwd = document.getElementById("adminPassword").value;
+      // Semplice test: se la password è sbagliata lo script lo dirà alle azioni successive
+      ADMIN_PASSWORD = pwd;
+      document.getElementById("modalLogin").classList.add("hidden");
+      document.getElementById("modalLogin").classList.remove("flex");
+      document.getElementById("modalAdmin").classList.remove("hidden");
+      loadData();
+    });
+    document.getElementById("btnCloseAdmin").addEventListener("click", () => {
+      document.getElementById("modalAdmin").classList.add("hidden");
+    });
+    document.getElementById("btnRefreshAdmin").addEventListener("click", async () => {
+      await loadData();
+      showToast("Dati aggiornati");
+    });
+
+    // Form add
+    document.getElementById("btnShowAdd").addEventListener("click", () => {
+      document.getElementById("formAdd").classList.toggle("hidden");
+    });
+    document.getElementById("btnCancelAdd").addEventListener("click", () => {
+      document.getElementById("formAdd").classList.add("hidden");
+      clearAddForm();
+    });
+
+    function clearAddForm() {
+      addSelectedEsterna = null;
+      addUIs = [];
+      document.getElementById("addEsternaSearch").value = "";
+      document.getElementById("addSelectedEsterna").classList.add("hidden");
+      document.getElementById("addUiChips").innerHTML = "";
+      document.getElementById("addInternaInput").value = "";
+      ["addPotenza","addCop","addEer","addScop","addSeer","addSup","addDenom"].forEach(id => {
+        document.getElementById(id).value = "";
+      });
+    }
+
+    // Admin: cerca esterna
+    const addEsternaSearch = document.getElementById("addEsternaSearch");
+    const addEsternaSuggestions = document.getElementById("addEsternaSuggestions");
+    addEsternaSearch.addEventListener("input", () => {
+      const q = addEsternaSearch.value.trim().toLowerCase();
+      if (q.length < 1) { addEsternaSuggestions.classList.add("hidden"); return; }
+      const matches = esterne.filter(e =>
+        String(e["Marca"]||"").toLowerCase().includes(q) ||
+        String(e["Unità Esterna"]||"").toLowerCase().includes(q)
+      ).slice(0, 10);
+      addEsternaSuggestions.innerHTML = matches.map(e => `
+        <div class="suggestion-item px-4 py-2.5 cursor-pointer text-[15px]"
+             data-marca="${esc(e["Marca"])}" data-unita="${esc(e["Unità Esterna"])}">
+          ${e["Marca"]} · ${e["Unità Esterna"]}
+        </div>`).join("");
+      addEsternaSuggestions.classList.remove("hidden");
+    });
+    addEsternaSuggestions.addEventListener("click", e => {
+      const item = e.target.closest(".suggestion-item");
+      if (!item) return;
+      addSelectedEsterna = esterne.find(x => x["Marca"] === item.dataset.marca && x["Unità Esterna"] === item.dataset.unita);
+      addEsternaSearch.value = "";
+      addEsternaSuggestions.classList.add("hidden");
+      document.getElementById("addSelectedEsterna").textContent = `${addSelectedEsterna["Marca"]} ${addSelectedEsterna["Unità Esterna"]}`;
+      document.getElementById("addSelectedEsterna").classList.remove("hidden");
+    });
+
+    // Admin: aggiungi UI
+    document.getElementById("addInternaInput").addEventListener("keydown", e => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const val = e.target.value.trim();
+        if (!val) return;
+        if (addUIs.length >= 5) { showToast("Massimo 5 unità interne"); return; }
+        addUIs.push(val);
+        e.target.value = "";
+        renderAddUIChips();
+      }
+    });
+    function renderAddUIChips() {
+      document.getElementById("addUiChips").innerHTML = addUIs.map((ui, i) => `
+        <span class="ui-chip">${ui}<button onclick="removeAddUI(${i})" class="hover:text-red-600">&times;</button></span>
+      `).join("");
+    }
+    window.removeAddUI = function(i) {
+      addUIs.splice(i, 1);
+      renderAddUIChips();
+    };
+
+    // Salva
+    document.getElementById("btnSaveModel").addEventListener("click", async () => {
+      if (!addSelectedEsterna) {
+        showToast("Seleziona prima l’unità esterna");
+        return;
+      }
+      if (addUIs.length === 0) {
+        showToast("Aggiungi almeno un’unità interna");
+        return;
+      }
+
+      const model = {
+        "Marca": addSelectedEsterna["Marca"],
+        "Unità Esterna": addSelectedEsterna["Unità Esterna"],
+        "UI1": addUIs[0] || "",
+        "UI2": addUIs[1] || "",
+        "UI3": addUIs[2] || "",
+        "UI4": addUIs[3] || "",
+        "UI5": addUIs[4] || "",
+        "Potenza riscaldamento": document.getElementById("addPotenza").value,
+        "COP": document.getElementById("addCop").value,
+        "EER": document.getElementById("addEer").value,
+        "SCOP": document.getElementById("addScop").value,
+        "SEER": document.getElementById("addSeer").value,
+        "Denominazione": document.getElementById("addDenom").value,
+        "Inverter": document.getElementById("addInverter").value,
+        "Reversibile": document.getElementById("addReversibile").value,
+        "Superficie utile": document.getElementById("addSup").value
+      };
+
+      const res = await api("saveCombinazione", { model }, ADMIN_PASSWORD);
+      if (res.conflict) {
+        if (confirm("Combinazione già presente. Vuoi sovrascrivere?")) {
+          await api("overwriteCombinazione", { model, rowIndex: res.existing.rowIndex }, ADMIN_PASSWORD);
+          showToast("Combinazione aggiornata");
+        } else {
+          showToast("Operazione annullata");
+          return;
+        }
+      } else if (res.success) {
+        showToast("Combinazione salvata");
+      } else {
+        showToast(res.error || "Errore");
+        return;
+      }
+      clearAddForm();
+      document.getElementById("formAdd").classList.add("hidden");
+      await loadData();
+    });
+
+    // Chiudi suggerimenti
+    document.addEventListener("click", e => {
+      if (!e.target.closest("#searchEsterna") && !e.target.closest("#suggestionsEsterna"))
+        suggestionsEsterna.classList.add("hidden");
+      if (!e.target.closest("#searchInterna") && !e.target.closest("#suggestionsInterna"))
+        suggestionsInterna.classList.add("hidden");
+      if (!e.target.closest("#addEsternaSearch") && !e.target.closest("#addEsternaSuggestions"))
+        addEsternaSuggestions.classList.add("hidden");
+    });
+
+    loadData();
+  </script>
+</body>
+</html>
