@@ -229,9 +229,18 @@
 
   <main class="max-w-5xl mx-auto px-5 py-10">
 
-    <div class="mb-10">
-      <h1 class="text-2xl font-semibold text-gray-900 tracking-tight">Ricerca dati tecnici</h1>
-      <p class="text-gray-500 mt-1.5 text-[15px]">Seleziona l’unità esterna (e le unità interne se previste)</p>
+    <div class="mb-10 flex items-start justify-between gap-4">
+      <div>
+        <h1 class="text-2xl font-semibold text-gray-900 tracking-tight">Ricerca dati tecnici</h1>
+        <p class="text-gray-500 mt-1.5 text-[15px]">Seleziona l’unità esterna (e le unità interne se previste)</p>
+      </div>
+      <button id="btnHelpUser" type="button" title="Come funziona"
+              class="shrink-0 flex items-center gap-2 px-3.5 py-2 rounded-xl border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        Guida
+      </button>
     </div>
 
     <!-- STEP 1: UNITÀ ESTERNA -->
@@ -272,7 +281,7 @@
 
       <div id="uiChips" class="flex flex-wrap gap-2 mb-4 min-h-[36px]"></div>
 
-      <div class="relative">
+      <div id="internaInputWrap" class="relative">
         <input id="searchInterna" type="text" placeholder="Aggiungi unità interna…"
                class="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white transition"
                autocomplete="off" disabled />
@@ -385,9 +394,18 @@
   <div id="modalAdmin" class="fixed inset-0 bg-black/50 z-50 hidden overflow-y-auto backdrop-blur-sm">
     <div class="min-h-screen flex items-start justify-center p-4 py-10">
       <div class="bg-white rounded-2xl shadow-xl w-full max-w-4xl">
-        <div class="px-7 py-5 border-b border-gray-100 flex items-center justify-between">
+        <div class="px-7 py-5 border-b border-gray-100 flex items-center justify-between gap-3">
           <h2 class="text-xl font-semibold text-gray-900">Gestione Database</h2>
-          <button id="btnCloseAdmin" class="w-9 h-9 rounded-full hover:bg-gray-100 flex items-center justify-center text-2xl text-gray-400 hover:text-gray-700 transition">&times;</button>
+          <div class="flex items-center gap-2">
+            <button id="btnHelpAdmin" type="button" title="Documentazione tecnica"
+                    class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+              Docs tecniche
+            </button>
+            <button id="btnCloseAdmin" class="w-9 h-9 rounded-full hover:bg-gray-100 flex items-center justify-center text-2xl text-gray-400 hover:text-gray-700 transition">&times;</button>
+          </div>
         </div>
 
         <div class="p-7">
@@ -506,6 +524,133 @@
           <p class="text-sm text-gray-400">
             Per modificare unità esterne (gas e quantità) usa direttamente il foglio Google <strong>Unita_Esterne</strong>.
           </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL GUIDA UTENTE -->
+  <div id="modalHelpUser" class="fixed inset-0 bg-black/50 z-[60] hidden overflow-y-auto backdrop-blur-sm">
+    <div class="min-h-screen flex items-start justify-center p-4 py-10">
+      <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg">
+        <div class="px-7 py-5 border-b border-gray-100 flex items-center justify-between">
+          <h2 class="text-xl font-semibold text-gray-900">Come usare il portale</h2>
+          <button id="btnCloseHelpUser" class="w-9 h-9 rounded-full hover:bg-gray-100 flex items-center justify-center text-2xl text-gray-400 hover:text-gray-700 transition">&times;</button>
+        </div>
+        <div class="p-7 space-y-5 text-[15px] text-gray-700 leading-relaxed">
+          <div>
+            <div class="font-semibold text-gray-900 mb-1">1. Cerca l’unità esterna</div>
+            <p class="text-gray-600">Scrivi marca o modello nella casella di ricerca e seleziona l’unità dall’elenco. Appare subito la tipologia e la quantità di gas.</p>
+          </div>
+          <div>
+            <div class="font-semibold text-gray-900 mb-1">2. Aggiungi le unità interne (se previste)</div>
+            <p class="text-gray-600">Se l’unità esterna prevede combinazioni con interne, puoi aggiungerle una alla volta. Puoi scegliere solo le unità che appartengono alla <strong>stessa combinazione</strong> registrata: non è possibile mischiare interne di combinazioni diverse.</p>
+          </div>
+          <div>
+            <div class="font-semibold text-gray-900 mb-1">3. Leggi i dati tecnici</div>
+            <p class="text-gray-600">Con la sola esterna vedi gas e quantità. Con la combinazione completa vedi anche potenza, COP, EER, SCOP, SEER e gli altri dati.</p>
+          </div>
+          <div>
+            <div class="font-semibold text-gray-900 mb-1">4. Modalità notte</div>
+            <p class="text-gray-600">Usa lo switch in alto a destra per passare al tema scuro. La preferenza viene ricordata.</p>
+          </div>
+          <div class="pt-2 border-t border-gray-100 text-sm text-gray-500">
+            I dati vengono aggiornati automaticamente quando torni sulla pagina o riprendi a cercare. Non serve ricaricare il browser dopo modifiche al foglio Google.
+          </div>
+        </div>
+        <div class="px-7 pb-6">
+          <button id="btnCloseHelpUser2" class="w-full py-3 rounded-xl bg-black text-white font-medium hover:bg-gray-800 transition">Ho capito</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DOCS TECNICHE ADMIN -->
+  <div id="modalHelpAdmin" class="fixed inset-0 bg-black/50 z-[60] hidden overflow-y-auto backdrop-blur-sm">
+    <div class="min-h-screen flex items-start justify-center p-4 py-10">
+      <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl">
+        <div class="px-7 py-5 border-b border-gray-100 flex items-center justify-between">
+          <h2 class="text-xl font-semibold text-gray-900">Documentazione tecnica</h2>
+          <button id="btnCloseHelpAdmin" class="w-9 h-9 rounded-full hover:bg-gray-100 flex items-center justify-center text-2xl text-gray-400 hover:text-gray-700 transition">&times;</button>
+        </div>
+        <div class="p-7 space-y-6 text-[14px] text-gray-700 leading-relaxed max-h-[70vh] overflow-y-auto">
+
+          <section>
+            <h3 class="font-semibold text-gray-900 text-[15px] mb-2">Architettura</h3>
+            <ul class="list-disc pl-5 space-y-1 text-gray-600">
+              <li>Frontend: singolo file <code class="text-xs bg-gray-100 px-1 rounded">index.html</code> (HTML + Tailwind CDN + JS vanilla).</li>
+              <li>Backend dati: Google Apps Script esposto come Web App (<code class="text-xs bg-gray-100 px-1 rounded">API_URL</code>).</li>
+              <li>Storage: Google Sheet con due fogli principali — <strong>Unita_Esterne</strong> e <strong>Combinazioni</strong>.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h3 class="font-semibold text-gray-900 text-[15px] mb-2">Foglio Unita_Esterne</h3>
+            <p class="text-gray-600 mb-1">Una riga = un’unità esterna. Campi usati dal portale:</p>
+            <ul class="list-disc pl-5 space-y-1 text-gray-600">
+              <li><strong>Marca</strong>, <strong>Unità Esterna</strong> — chiave di ricerca e collegamento.</li>
+              <li><strong>Tipologia gas</strong>, <strong>Quantitativo gas</strong> — mostrati sempre dopo la selezione dell’esterna.</li>
+            </ul>
+            <p class="text-gray-500 text-sm mt-2">Gas e quantità si modificano solo da questo foglio (non dal form Admin).</p>
+          </section>
+
+          <section>
+            <h3 class="font-semibold text-gray-900 text-[15px] mb-2">Foglio Combinazioni</h3>
+            <p class="text-gray-600 mb-1">Una riga = una combinazione valida e atomica.</p>
+            <ul class="list-disc pl-5 space-y-1 text-gray-600">
+              <li>Chiave: <strong>Marca</strong> + <strong>Unità Esterna</strong> (+ UI1…UI5 se presenti).</li>
+              <li>UI1–UI5 vuote = combinazione “solo esterna” (dati tecnici senza interne).</li>
+              <li>Dati tecnici: Potenza riscaldamento, COP, EER, SCOP, SEER, Denominazione, Inverter, Reversibile, Superficie utile.</li>
+            </ul>
+            <p class="text-gray-500 text-sm mt-2"><strong>Regola fondamentale:</strong> le unità interne di righe diverse non sono abbinabili. Il portale propone solo UI presenti nella stessa riga, filtrando in base a quelle già selezionate.</p>
+          </section>
+
+          <section>
+            <h3 class="font-semibold text-gray-900 text-[15px] mb-2">Logica di ricerca (frontend)</h3>
+            <ol class="list-decimal pl-5 space-y-1 text-gray-600">
+              <li>Selezione esterna → se esistono combinazioni con almeno una UI valorizzata, si attiva lo step interne; altrimenti si cerca la riga “solo esterna” e si mostrano i dati tecnici completi.</li>
+              <li>Con interne possibili ma nessuna ancora scelta → solo gas/quantità da Unita_Esterne.</li>
+              <li>UI compatibili = quelle di righe che contengono già tutte le UI selezionate.</li>
+              <li>Se non restano UI compatibili, il campo “Aggiungi interna” viene nascosto.</li>
+              <li>Match finale: confronto multiset delle UI (ordine irrilevante, case-insensitive).</li>
+            </ol>
+          </section>
+
+          <section>
+            <h3 class="font-semibold text-gray-900 text-[15px] mb-2">API Apps Script (azioni)</h3>
+            <ul class="list-disc pl-5 space-y-1 text-gray-600">
+              <li><code class="text-xs bg-gray-100 px-1 rounded">get</code> — restituisce { esterne, combinazioni }.</li>
+              <li><code class="text-xs bg-gray-100 px-1 rounded">saveCombinazione</code> — inserisce (password richiesta); se esiste già risponde con conflict.</li>
+              <li><code class="text-xs bg-gray-100 px-1 rounded">overwriteCombinazione</code> — sovrascrive riga esistente (password + rowIndex).</li>
+            </ul>
+          </section>
+
+          <section>
+            <h3 class="font-semibold text-gray-900 text-[15px] mb-2">Refresh dati</h3>
+            <ul class="list-disc pl-5 space-y-1 text-gray-600">
+              <li>Caricamento iniziale con overlay a tutto schermo.</li>
+              <li>Ricarica silenziosa se i dati hanno più di 30 secondi: al focus sulla ricerca, a ogni digitazione (se stale), e al ritorno sulla scheda del browser (<code class="text-xs bg-gray-100 px-1 rounded">visibilitychange</code>).</li>
+              <li>In Admin: pulsante “Aggiorna dati”.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h3 class="font-semibold text-gray-900 text-[15px] mb-2">Admin – form nuova combinazione</h3>
+            <p class="text-gray-600">Permette di salvare una combinazione (anche senza interne). Le UI si aggiungono a mano (Invio). Conflitti: conferma di sovrascrittura. Password inviata a ogni write; validazione lato Apps Script.</p>
+          </section>
+
+          <section>
+            <h3 class="font-semibold text-gray-900 text-[15px] mb-2">Manutenzione / evoluzioni tipiche</h3>
+            <ul class="list-disc pl-5 space-y-1 text-gray-600">
+              <li>Nuovi campi tecnici → aggiungere colonna nel foglio Combinazioni, campo in showFullResult e nel form Admin, e gestirli nello script Google.</li>
+              <li>Cambio URL sheet o deploy script → aggiornare <code class="text-xs bg-gray-100 px-1 rounded">API_URL</code> / <code class="text-xs bg-gray-100 px-1 rounded">SHEET_URL</code> in cima allo script.</li>
+              <li>Tema: classe <code class="text-xs bg-gray-100 px-1 rounded">dark</code> su <code class="text-xs bg-gray-100 px-1 rounded">html</code>, preferenza in localStorage chiave <code class="text-xs bg-gray-100 px-1 rounded">t5-theme</code>.</li>
+            </ul>
+          </section>
+
+        </div>
+        <div class="px-7 py-4 border-t border-gray-100">
+          <button id="btnCloseHelpAdmin2" class="w-full py-3 rounded-xl bg-black text-white font-medium hover:bg-gray-800 transition">Chiudi</button>
         </div>
       </div>
     </div>
@@ -691,6 +836,7 @@
       }
 
       renderUIChips();
+      updateInternaInputVisibility();
       tryFindCombination();
     }
 
@@ -704,6 +850,7 @@
       document.getElementById("resultCard").classList.add("hidden");
       document.getElementById("noResult").classList.add("hidden");
       document.getElementById("step2Hint").textContent = "Seleziona le unità una alla volta. L’ordine non è rilevante.";
+      document.getElementById("internaInputWrap").style.display = "";
       renderUIChips();
     });
 
@@ -755,6 +902,7 @@
       searchInterna.value = "";
       suggestionsInterna.classList.add("hidden");
       renderUIChips();
+      updateInternaInputVisibility();
       tryFindCombination();
     });
 
@@ -766,8 +914,29 @@
     window.removeUI = function(i) {
       selectedUIs.splice(i, 1);
       renderUIChips();
+      updateInternaInputVisibility();
       tryFindCombination();
     };
+
+    // Nasconde il campo aggiungi se non ci sono altre UI compatibili con la selezione attuale
+    function updateInternaInputVisibility() {
+      const wrap = document.getElementById("internaInputWrap");
+      const hint = document.getElementById("step2Hint");
+      if (!selectedEsterna || !hasInternalOptions) {
+        wrap.style.display = "";
+        return;
+      }
+      const more = getCompatibleUIs();
+      if (selectedUIs.length > 0 && more.length === 0) {
+        wrap.style.display = "none";
+        suggestionsInterna.classList.add("hidden");
+        hint.textContent = "Combinazione selezionata. Rimuovi un’unità interna per modificarla.";
+      } else {
+        wrap.style.display = "";
+        searchInterna.disabled = false;
+        hint.textContent = "Le unità interne devono appartenere alla stessa combinazione del foglio. Senza interne vedi solo gas e quantità.";
+      }
+    }
 
     // ===== TROVA COMBINAZIONE =====
     function tryFindCombination() {
@@ -1006,6 +1175,21 @@
     document.addEventListener("visibilitychange", () => {
       if (document.visibilityState === "visible") refreshIfStale();
     });
+
+    // ===== GUIDE / DOCS =====
+    function openModal(id) {
+      const el = document.getElementById(id);
+      el.classList.remove("hidden");
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.add("hidden");
+    }
+    document.getElementById("btnHelpUser").addEventListener("click", () => openModal("modalHelpUser"));
+    document.getElementById("btnCloseHelpUser").addEventListener("click", () => closeModal("modalHelpUser"));
+    document.getElementById("btnCloseHelpUser2").addEventListener("click", () => closeModal("modalHelpUser"));
+    document.getElementById("btnHelpAdmin").addEventListener("click", () => openModal("modalHelpAdmin"));
+    document.getElementById("btnCloseHelpAdmin").addEventListener("click", () => closeModal("modalHelpAdmin"));
+    document.getElementById("btnCloseHelpAdmin2").addEventListener("click", () => closeModal("modalHelpAdmin"));
 
     loadData(true);
   </script>
