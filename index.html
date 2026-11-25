@@ -28,8 +28,8 @@
       transition: background-color 0.2s, color 0.2s;
     }
     html.dark body {
-      background: #0f1115;
-      color: #e5e7eb;
+      background: #0a0c10;
+      color: #f1f5f9;
     }
     .card {
       background: white;
@@ -39,9 +39,9 @@
       transition: background-color 0.2s, border-color 0.2s;
     }
     html.dark .card {
-      background: #1a1d24;
-      border-color: #2d323c;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      background: #151820;
+      border-color: #2a2f3a;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.5);
     }
     .label {
       font-size: 13px;
@@ -51,7 +51,7 @@
       margin-bottom: 4px;
     }
     html.dark .label {
-      color: #9ca3af;
+      color: #94a3b8;
     }
     .value {
       font-size: 17px;
@@ -59,7 +59,7 @@
       color: #111;
     }
     html.dark .value {
-      color: #f3f4f6;
+      color: #f8fafc;
     }
     .suggestion-item:hover, .suggestion-item.active {
       background-color: #f0fdf4;
@@ -95,13 +95,13 @@
     }
     html.dark input,
     html.dark select {
-      background: #111318;
-      border-color: #2d323c;
-      color: #e5e7eb;
+      background: #0d0f14;
+      border-color: #3a4050;
+      color: #f1f5f9;
     }
     html.dark input::placeholder,
     html.dark select::placeholder {
-      color: #6b7280;
+      color: #64748b;
     }
     .step-num {
       width: 28px;
@@ -116,36 +116,85 @@
       justify-content: center;
     }
     html.dark .step-num {
-      background: #e5e7eb;
-      color: #111;
+      background: #e2e8f0;
+      color: #0f172a;
     }
-    /* Dark mode overrides for Tailwind utility classes used in markup */
-    html.dark .bg-white { background-color: #1a1d24 !important; }
-    html.dark .bg-gray-50 { background-color: #111318 !important; }
-    html.dark .bg-black { background-color: #0a0b0e !important; }
+
+    /* ===== DARK MODE HIGH CONTRAST ===== */
+    html.dark .bg-white { background-color: #151820 !important; }
+    html.dark .bg-gray-50 { background-color: #0d0f14 !important; }
+    html.dark .bg-black { background-color: #000 !important; }
     html.dark .border-gray-100,
-    html.dark .border-gray-200 { border-color: #2d323c !important; }
-    html.dark .text-gray-900 { color: #f3f4f6 !important; }
-    html.dark .text-gray-700 { color: #d1d5db !important; }
-    html.dark .text-gray-600 { color: #9ca3af !important; }
-    html.dark .text-gray-500 { color: #9ca3af !important; }
-    html.dark .text-gray-400 { color: #6b7280 !important; }
-    html.dark .hover\:bg-gray-50:hover { background-color: #1f232b !important; }
-    html.dark .hover\:bg-gray-100:hover { background-color: #1f232b !important; }
-    html.dark .hover\:bg-gray-800:hover { background-color: #1f232b !important; }
+    html.dark .border-gray-200 { border-color: #2a2f3a !important; }
+    html.dark .text-gray-900 { color: #f8fafc !important; }
+    html.dark .text-gray-700 { color: #e2e8f0 !important; }
+    html.dark .text-gray-600 { color: #cbd5e1 !important; }
+    html.dark .text-gray-500 { color: #94a3b8 !important; }
+    html.dark .text-gray-400 { color: #64748b !important; }
+    html.dark .hover\:bg-gray-50:hover { background-color: #1e2330 !important; }
+    html.dark .hover\:bg-gray-100:hover { background-color: #1e2330 !important; }
+    html.dark .hover\:bg-gray-800:hover { background-color: #1e2330 !important; }
     html.dark .hover\:text-black:hover { color: #fff !important; }
     html.dark .bg-emerald-50 { background-color: #052e16 !important; }
-    html.dark .border-emerald-100 { border-color: #14532d !important; }
-    html.dark .text-emerald-700 { color: #86efac !important; }
+    html.dark .border-emerald-100 { border-color: #166534 !important; }
+    html.dark .text-emerald-700 { color: #4ade80 !important; }
     html.dark .text-emerald-900 { color: #bbf7d0 !important; }
     html.dark .hover\:bg-emerald-100:hover { background-color: #14532d !important; }
     html.dark .hover\:text-emerald-900:hover { color: #dcfce7 !important; }
+
+    /* ===== SWITCH ===== */
+    .theme-switch {
+      position: relative;
+      width: 48px;
+      height: 26px;
+      border-radius: 9999px;
+      background: #d1d5db;
+      cursor: pointer;
+      transition: background 0.2s;
+      border: none;
+      padding: 0;
+      flex-shrink: 0;
+    }
+    .theme-switch.on {
+      background: #16a34a;
+    }
+    .theme-switch .knob {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+      transition: transform 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .theme-switch.on .knob {
+      transform: translateX(22px);
+    }
+    .theme-switch .knob svg {
+      width: 12px;
+      height: 12px;
+      color: #6b7280;
+    }
+    .theme-switch.on .knob svg {
+      color: #16a34a;
+    }
+    html.dark .theme-switch {
+      background: #3a4050;
+    }
+    html.dark .theme-switch.on {
+      background: #16a34a;
+    }
   </style>
 </head>
 <body class="min-h-screen">
 
   <!-- HEADER -->
-  <header class="bg-white border-b border-gray-200 dark:bg-[#1a1d24] dark:border-[#2d323c]">
+  <header class="bg-white border-b border-gray-200">
     <div class="max-w-5xl mx-auto px-5 h-16 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div class="w-9 h-9 bg-black text-white flex items-center justify-center font-bold text-sm tracking-tight dark:bg-white dark:text-black">T5</div>
@@ -154,19 +203,21 @@
           <div class="text-xs text-gray-400 -mt-0.5">Database Condizionatori</div>
         </div>
       </div>
-      <div class="flex items-center gap-2">
-        <!-- Dark mode switch -->
-        <button id="btnTheme" type="button" title="Modalità notte"
-                class="w-9 h-9 rounded-lg flex items-center justify-center text-gray-600 hover:bg-gray-100 transition dark:text-gray-300 dark:hover:bg-[#1f232b]">
-          <!-- Sun (shown in dark mode) -->
-          <svg id="iconSun" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
-          </svg>
-          <!-- Moon (shown in light mode) -->
-          <svg id="iconMoon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
-          </svg>
-        </button>
+      <div class="flex items-center gap-4">
+        <!-- Theme switch -->
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-gray-500 hidden sm:inline">Notte</span>
+          <button id="btnTheme" type="button" class="theme-switch" title="Modalità notte" aria-label="Attiva modalità notte">
+            <span class="knob">
+              <svg id="iconMoon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+              </svg>
+              <svg id="iconSun" class="hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+              </svg>
+            </span>
+          </button>
+        </div>
         <button id="btnAdmin" class="text-sm font-medium text-gray-600 hover:text-black transition px-3 py-1.5 rounded-lg hover:bg-gray-100">
           Admin
         </button>
@@ -178,7 +229,7 @@
 
     <div class="mb-10">
       <h1 class="text-2xl font-semibold text-gray-900 tracking-tight">Ricerca dati tecnici</h1>
-      <p class="text-gray-500 mt-1.5 text-[15px]">Seleziona l’unità esterna (e opzionalmente le unità interne)</p>
+      <p class="text-gray-500 mt-1.5 text-[15px]">Seleziona l’unità esterna (e le unità interne se previste)</p>
     </div>
 
     <!-- STEP 1: UNITÀ ESTERNA -->
@@ -192,11 +243,11 @@
         <input id="searchEsterna" type="text"
                placeholder="Cerca marca o modello (es. 2MXF40, Daikin…)"
                class="w-full pl-11 pr-4 py-3.5 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white transition"
-               autocomplete="off" />
+               autocomplete="off" disabled />
         <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
         </svg>
-        <div id="suggestionsEsterna" class="absolute z-30 w-full mt-1.5 bg-white border border-gray-200 rounded-xl shadow-lg hidden max-h-64 overflow-y-auto dark:bg-[#1a1d24] dark:border-[#2d323c]"></div>
+        <div id="suggestionsEsterna" class="absolute z-30 w-full mt-1.5 bg-white border border-gray-200 rounded-xl shadow-lg hidden max-h-64 overflow-y-auto"></div>
       </div>
 
       <div id="selectedEsterna" class="hidden mt-4 p-4 bg-emerald-50 border border-emerald-100 rounded-xl flex items-center justify-between">
@@ -214,7 +265,7 @@
     <div id="step2" class="card p-6 mb-5 opacity-40 pointer-events-none transition-opacity">
       <div class="flex items-center gap-3 mb-4">
         <div class="step-num">2</div>
-        <h2 class="font-semibold text-gray-900 text-[17px]">Unità Interne <span class="text-gray-400 font-normal text-[15px]">(fino a 5 · opzionale)</span></h2>
+        <h2 class="font-semibold text-gray-900 text-[17px]">Unità Interne <span class="text-gray-400 font-normal text-[15px]">(fino a 5)</span></h2>
       </div>
 
       <div id="uiChips" class="flex flex-wrap gap-2 mb-4 min-h-[36px]"></div>
@@ -226,14 +277,14 @@
         <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
         </svg>
-        <div id="suggestionsInterna" class="absolute z-30 w-full mt-1.5 bg-white border border-gray-200 rounded-xl shadow-lg hidden max-h-52 overflow-y-auto dark:bg-[#1a1d24] dark:border-[#2d323c]"></div>
+        <div id="suggestionsInterna" class="absolute z-30 w-full mt-1.5 bg-white border border-gray-200 rounded-xl shadow-lg hidden max-h-52 overflow-y-auto"></div>
       </div>
-      <p class="text-[13px] text-gray-400 mt-2.5">Seleziona le unità una alla volta. L’ordine non è rilevante. Se non ne selezioni nessuna vedi solo gas e quantità.</p>
+      <p id="step2Hint" class="text-[13px] text-gray-400 mt-2.5">Seleziona le unità una alla volta. L’ordine non è rilevante.</p>
     </div>
 
     <!-- RISULTATO -->
     <div id="resultCard" class="hidden card overflow-hidden">
-      <div class="bg-black text-white px-6 py-5 dark:bg-[#0a0b0e]">
+      <div class="bg-black text-white px-6 py-5">
         <div class="text-xs font-medium text-gray-400 uppercase tracking-wider" id="resSubtitle">Combinazione trovata</div>
         <div id="resTitle" class="text-xl font-semibold mt-1 tracking-tight"></div>
       </div>
@@ -300,12 +351,23 @@
 
   </main>
 
+  <!-- LOADING OVERLAY -->
+  <div id="loadingOverlay" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/55 backdrop-blur-[2px]">
+    <div class="card px-10 py-9 flex flex-col items-center gap-5 min-w-[280px] shadow-2xl">
+      <div class="w-11 h-11 border-[3px] border-gray-200 border-t-black rounded-full animate-spin dark:border-[#2a2f3a] dark:border-t-white"></div>
+      <div class="text-center">
+        <div class="font-semibold text-gray-900 text-[17px] tracking-tight">Caricamento database in corso</div>
+        <div class="text-sm text-gray-500 mt-1.5">Attendere qualche secondo…</div>
+      </div>
+    </div>
+  </div>
+
   <!-- TOAST -->
   <div id="toast" class="fixed bottom-6 right-6 bg-black text-white px-5 py-3.5 rounded-xl shadow-lg text-[15px] hidden z-50"></div>
 
   <!-- MODAL LOGIN -->
-  <div id="modalLogin" class="fixed inset-0 bg-black/40 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
-    <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-7 dark:bg-[#1a1d24]">
+  <div id="modalLogin" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-7">
       <h2 class="text-xl font-semibold text-gray-900 mb-5">Accesso Admin</h2>
       <input id="adminPassword" type="password" placeholder="Password"
              class="w-full border border-gray-200 rounded-xl px-4 py-3.5 mb-5 bg-gray-50" />
@@ -318,9 +380,9 @@
   </div>
 
   <!-- MODAL ADMIN -->
-  <div id="modalAdmin" class="fixed inset-0 bg-black/40 z-50 hidden overflow-y-auto backdrop-blur-sm">
+  <div id="modalAdmin" class="fixed inset-0 bg-black/50 z-50 hidden overflow-y-auto backdrop-blur-sm">
     <div class="min-h-screen flex items-start justify-center p-4 py-10">
-      <div class="bg-white rounded-2xl shadow-xl w-full max-w-4xl dark:bg-[#1a1d24]">
+      <div class="bg-white rounded-2xl shadow-xl w-full max-w-4xl">
         <div class="px-7 py-5 border-b border-gray-100 flex items-center justify-between">
           <h2 class="text-xl font-semibold text-gray-900">Gestione Database</h2>
           <button id="btnCloseAdmin" class="w-9 h-9 rounded-full hover:bg-gray-100 flex items-center justify-center text-2xl text-gray-400 hover:text-gray-700 transition">&times;</button>
@@ -374,14 +436,14 @@
               <div class="relative">
                 <input id="addEsternaSearch" type="text" placeholder="Cerca unità esterna…"
                        class="w-full border border-gray-200 rounded-xl px-4 py-3 bg-white" autocomplete="off" />
-                <div id="addEsternaSuggestions" class="absolute z-20 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg hidden max-h-48 overflow-y-auto dark:bg-[#1a1d24] dark:border-[#2d323c]"></div>
+                <div id="addEsternaSuggestions" class="absolute z-20 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg hidden max-h-48 overflow-y-auto"></div>
               </div>
               <div id="addSelectedEsterna" class="hidden mt-2 text-[15px] font-medium text-emerald-700"></div>
             </div>
 
             <!-- Interne -->
             <div class="mb-5">
-              <div class="label">Unità Interne (fino a 5)</div>
+              <div class="label">Unità Interne (fino a 5 · lascia vuoto se solo esterna)</div>
               <div id="addUiChips" class="flex flex-wrap gap-2 mb-2 min-h-[32px]"></div>
               <input id="addInternaInput" type="text" placeholder="Scrivi modello unità interna e premi Invio"
                      class="w-full border border-gray-200 rounded-xl px-4 py-3 bg-white" />
@@ -457,15 +519,17 @@
     let addSelectedEsterna = null;
     let addUIs = [];
     let ADMIN_PASSWORD = "";
+    let hasInternalOptions = false; // true se esistono combinazioni con UI per l'esterna selezionata
 
     // ===== DARK MODE =====
     function applyTheme(isDark) {
       document.documentElement.classList.toggle("dark", isDark);
+      const sw = document.getElementById("btnTheme");
+      sw.classList.toggle("on", isDark);
       document.getElementById("iconSun").classList.toggle("hidden", !isDark);
       document.getElementById("iconMoon").classList.toggle("hidden", isDark);
       localStorage.setItem("t5-theme", isDark ? "dark" : "light");
     }
-    // Init theme
     (function () {
       const saved = localStorage.getItem("t5-theme");
       const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -476,12 +540,6 @@
     });
 
     // ===== UTILS =====
-    function fmt(val) {
-      if (val === null || val === undefined || val === "" || val === "N/D") return "—";
-      const n = Number(val);
-      if (isNaN(n)) return String(val);
-      return n.toFixed(2).replace(/\.?0+$/, match => match === ".00" ? ".00" : match.replace(/0+$/, "")).replace(/\.$/, "");
-    }
     function fmt2(val) {
       if (val === null || val === undefined || val === "" || val === "N/D") return "—";
       const n = Number(val);
@@ -511,7 +569,21 @@
       return res.json();
     }
 
-    async function loadData() {
+    function setLoading(on) {
+      const overlay = document.getElementById("loadingOverlay");
+      if (on) {
+        overlay.classList.remove("hidden");
+        overlay.style.display = "flex";
+        document.getElementById("searchEsterna").disabled = true;
+      } else {
+        overlay.classList.add("hidden");
+        overlay.style.display = "none";
+        document.getElementById("searchEsterna").disabled = false;
+      }
+    }
+
+    async function loadData(showOverlay = false) {
+      if (showOverlay) setLoading(true);
       try {
         const res = await api("get");
         if (res.success) {
@@ -525,7 +597,26 @@
       } catch (e) {
         console.error(e);
         showToast("Errore di connessione");
+      } finally {
+        if (showOverlay) setLoading(false);
       }
+    }
+
+    // Restituisce le combinazioni per una data esterna
+    function combForEsterna(e) {
+      return combinazioni.filter(c =>
+        c["Marca"] === e["Marca"] && c["Unità Esterna"] === e["Unità Esterna"]
+      );
+    }
+
+    // True se la combinazione ha almeno una UI valorizzata
+    function hasAnyUI(c) {
+      return ["UI1","UI2","UI3","UI4","UI5"].some(k => String(c[k]||"").trim());
+    }
+
+    // Trova la combinazione "solo esterna" (nessuna UI)
+    function findSoloCombinazione(e) {
+      return combForEsterna(e).find(c => !hasAnyUI(c)) || null;
     }
 
     // ===== RICERCA ESTERNA =====
@@ -565,8 +656,27 @@
       suggestionsEsterna.classList.add("hidden");
       document.getElementById("selectedEsterna").classList.remove("hidden");
       document.getElementById("selEsternaText").textContent = `${e["Marca"]} ${e["Unità Esterna"]}`;
-      document.getElementById("step2").classList.remove("opacity-40", "pointer-events-none");
-      document.getElementById("searchInterna").disabled = false;
+
+      // Controlla se esistono combinazioni con unità interne
+      const combs = combForEsterna(e);
+      hasInternalOptions = combs.some(hasAnyUI);
+
+      const step2 = document.getElementById("step2");
+      const searchInterna = document.getElementById("searchInterna");
+      const hint = document.getElementById("step2Hint");
+
+      if (hasInternalOptions) {
+        // Ci sono combinazioni multi-split → abilita step 2
+        step2.classList.remove("opacity-40", "pointer-events-none", "hidden");
+        searchInterna.disabled = false;
+        hint.textContent = "Seleziona le unità una alla volta. L’ordine non è rilevante. Senza interne vedi solo gas e quantità.";
+      } else {
+        // Solo esterna (o nessuna combinazione con UI) → nascondi/disabilita step 2
+        step2.classList.add("opacity-40", "pointer-events-none");
+        searchInterna.disabled = true;
+        hint.textContent = "Questa unità esterna non prevede unità interne.";
+      }
+
       renderUIChips();
       tryFindCombination();
     }
@@ -574,11 +684,13 @@
     document.getElementById("btnClearEsterna").addEventListener("click", () => {
       selectedEsterna = null;
       selectedUIs = [];
+      hasInternalOptions = false;
       document.getElementById("selectedEsterna").classList.add("hidden");
       document.getElementById("step2").classList.add("opacity-40", "pointer-events-none");
       document.getElementById("searchInterna").disabled = true;
       document.getElementById("resultCard").classList.add("hidden");
       document.getElementById("noResult").classList.add("hidden");
+      document.getElementById("step2Hint").textContent = "Seleziona le unità una alla volta. L’ordine non è rilevante.";
       renderUIChips();
     });
 
@@ -587,11 +699,11 @@
     const suggestionsInterna = document.getElementById("suggestionsInterna");
 
     searchInterna.addEventListener("input", () => {
-      if (!selectedEsterna) return;
+      if (!selectedEsterna || !hasInternalOptions) return;
       const q = searchInterna.value.trim().toLowerCase();
       const possible = new Set();
-      combinazioni
-        .filter(c => c["Marca"] === selectedEsterna["Marca"] && c["Unità Esterna"] === selectedEsterna["Unità Esterna"])
+      combForEsterna(selectedEsterna)
+        .filter(hasAnyUI)
         .forEach(c => {
           ["UI1","UI2","UI3","UI4","UI5"].forEach(k => { if (c[k]) possible.add(String(c[k]).trim()); });
         });
@@ -635,23 +747,35 @@
       document.getElementById("noResult").classList.add("hidden");
       if (!selectedEsterna) return;
 
-      // Solo unità esterna → mostra solo gas e quantità dal foglio Unita_Esterne
+      // Caso A: nessuna opzione di interne (solo esterna nel foglio Combinazioni)
+      if (!hasInternalOptions) {
+        const solo = findSoloCombinazione(selectedEsterna);
+        if (solo) {
+          showFullResult(solo, []); // dati tecnici da Combinazioni + gas da Unita_Esterne
+        } else {
+          // Nessuna riga in Combinazioni → mostra almeno gas/qty
+          showPartialResult(selectedEsterna);
+        }
+        return;
+      }
+
+      // Caso B: esistono combinazioni con interne
       if (selectedUIs.length === 0) {
+        // Nessuna interna selezionata → solo gas/qty
         showPartialResult(selectedEsterna);
         return;
       }
 
-      // Con unità interne → cerca combinazione completa
+      // Cerca match esatto delle UI
       const selectedSorted = [...selectedUIs].map(s => s.trim().toLowerCase()).sort().join("|");
-      const match = combinazioni.find(c => {
-        if (c["Marca"] !== selectedEsterna["Marca"] || c["Unità Esterna"] !== selectedEsterna["Unità Esterna"]) return false;
+      const match = combForEsterna(selectedEsterna).find(c => {
         const combUIs = ["UI1","UI2","UI3","UI4","UI5"]
           .map(k => String(c[k]||"").trim()).filter(Boolean)
           .map(s => s.toLowerCase()).sort().join("|");
         return combUIs === selectedSorted;
       });
 
-      if (match) showResult(match);
+      if (match) showFullResult(match, selectedUIs);
       else document.getElementById("noResult").classList.remove("hidden");
     }
 
@@ -659,8 +783,7 @@
       document.querySelectorAll(".full-only").forEach(el => {
         el.style.display = visible ? "" : "none";
       });
-      // Interne field: hide when partial
-      document.getElementById("fieldInterne").style.display = visible ? "" : "none";
+      document.getElementById("fieldInterne").style.display = visible && selectedUIs.length > 0 ? "" : "none";
     }
 
     function showPartialResult(e) {
@@ -674,13 +797,16 @@
       setFullFieldsVisible(false);
     }
 
-    function showResult(c) {
+    function showFullResult(c, uis) {
       document.getElementById("resultCard").classList.remove("hidden");
-      document.getElementById("resSubtitle").textContent = "Combinazione trovata";
-      document.getElementById("resTitle").textContent = `${c["Marca"]} ${c["Unità Esterna"]} + ${selectedUIs.join(" + ")}`;
+      const isSolo = !uis || uis.length === 0;
+      document.getElementById("resSubtitle").textContent = isSolo ? "Dati tecnici" : "Combinazione trovata";
+      document.getElementById("resTitle").textContent = isSolo
+        ? `${c["Marca"]} ${c["Unità Esterna"]}`
+        : `${c["Marca"]} ${c["Unità Esterna"]} + ${uis.join(" + ")}`;
       document.getElementById("resMarca").textContent = c["Marca"] || "—";
       document.getElementById("resEsterna").textContent = c["Unità Esterna"] || "—";
-      document.getElementById("resInterne").textContent = selectedUIs.join(", ") || "—";
+      document.getElementById("resInterne").textContent = (uis && uis.length) ? uis.join(", ") : "—";
       document.getElementById("resGas").textContent = selectedEsterna["Tipologia gas"] || "—";
       document.getElementById("resQty").textContent = selectedEsterna["Quantitativo gas"] || "—";
       document.getElementById("resPotenza").textContent = fmt2(c["Potenza riscaldamento"]);
@@ -692,6 +818,7 @@
       document.getElementById("resInvRev").textContent = `${c["Inverter"] || "—"} / ${c["Reversibile"] || "—"}`;
       document.getElementById("resSup").textContent = fmt2(c["Superficie utile"]);
       setFullFieldsVisible(true);
+      if (isSolo) document.getElementById("fieldInterne").style.display = "none";
     }
 
     // ===== ADMIN =====
@@ -791,14 +918,10 @@
       renderAddUIChips();
     };
 
-    // Salva
+    // Salva (ora permette anche 0 interne = solo esterna)
     document.getElementById("btnSaveModel").addEventListener("click", async () => {
       if (!addSelectedEsterna) {
         showToast("Seleziona prima l’unità esterna");
-        return;
-      }
-      if (addUIs.length === 0) {
-        showToast("Aggiungi almeno un’unità interna");
         return;
       }
 
@@ -851,7 +974,7 @@
         addEsternaSuggestions.classList.add("hidden");
     });
 
-    loadData();
+    loadData(true);
   </script>
 </body>
 </html>
