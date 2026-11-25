@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Database Condizionatori – Termocinque</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -20,12 +25,23 @@
       font-size: 16px;
       color: #1f2937;
       background: #f3f4f6;
+      transition: background-color 0.2s, color 0.2s;
+    }
+    html.dark body {
+      background: #0f1115;
+      color: #e5e7eb;
     }
     .card {
       background: white;
       border-radius: 12px;
       border: 1px solid var(--t5-border);
       box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+    html.dark .card {
+      background: #1a1d24;
+      border-color: #2d323c;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
     }
     .label {
       font-size: 13px;
@@ -34,13 +50,23 @@
       letter-spacing: 0.01em;
       margin-bottom: 4px;
     }
+    html.dark .label {
+      color: #9ca3af;
+    }
     .value {
       font-size: 17px;
       font-weight: 500;
       color: #111;
     }
+    html.dark .value {
+      color: #f3f4f6;
+    }
     .suggestion-item:hover, .suggestion-item.active {
       background-color: #f0fdf4;
+    }
+    html.dark .suggestion-item:hover,
+    html.dark .suggestion-item.active {
+      background-color: #14532d;
     }
     .ui-chip {
       display: inline-flex;
@@ -54,6 +80,11 @@
       color: #166534;
       border: 1px solid #bbf7d0;
     }
+    html.dark .ui-chip {
+      background: #14532d;
+      color: #86efac;
+      border-color: #166534;
+    }
     input, select {
       font-size: 16px !important;
     }
@@ -61,6 +92,16 @@
       outline: none;
       border-color: #16a34a;
       box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
+    }
+    html.dark input,
+    html.dark select {
+      background: #111318;
+      border-color: #2d323c;
+      color: #e5e7eb;
+    }
+    html.dark input::placeholder,
+    html.dark select::placeholder {
+      color: #6b7280;
     }
     .step-num {
       width: 28px;
@@ -74,23 +115,62 @@
       align-items: center;
       justify-content: center;
     }
+    html.dark .step-num {
+      background: #e5e7eb;
+      color: #111;
+    }
+    /* Dark mode overrides for Tailwind utility classes used in markup */
+    html.dark .bg-white { background-color: #1a1d24 !important; }
+    html.dark .bg-gray-50 { background-color: #111318 !important; }
+    html.dark .bg-black { background-color: #0a0b0e !important; }
+    html.dark .border-gray-100,
+    html.dark .border-gray-200 { border-color: #2d323c !important; }
+    html.dark .text-gray-900 { color: #f3f4f6 !important; }
+    html.dark .text-gray-700 { color: #d1d5db !important; }
+    html.dark .text-gray-600 { color: #9ca3af !important; }
+    html.dark .text-gray-500 { color: #9ca3af !important; }
+    html.dark .text-gray-400 { color: #6b7280 !important; }
+    html.dark .hover\:bg-gray-50:hover { background-color: #1f232b !important; }
+    html.dark .hover\:bg-gray-100:hover { background-color: #1f232b !important; }
+    html.dark .hover\:bg-gray-800:hover { background-color: #1f232b !important; }
+    html.dark .hover\:text-black:hover { color: #fff !important; }
+    html.dark .bg-emerald-50 { background-color: #052e16 !important; }
+    html.dark .border-emerald-100 { border-color: #14532d !important; }
+    html.dark .text-emerald-700 { color: #86efac !important; }
+    html.dark .text-emerald-900 { color: #bbf7d0 !important; }
+    html.dark .hover\:bg-emerald-100:hover { background-color: #14532d !important; }
+    html.dark .hover\:text-emerald-900:hover { color: #dcfce7 !important; }
   </style>
 </head>
 <body class="min-h-screen">
 
   <!-- HEADER -->
-  <header class="bg-white border-b border-gray-200">
+  <header class="bg-white border-b border-gray-200 dark:bg-[#1a1d24] dark:border-[#2d323c]">
     <div class="max-w-5xl mx-auto px-5 h-16 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="w-9 h-9 bg-black text-white flex items-center justify-center font-bold text-sm tracking-tight">T5</div>
+        <div class="w-9 h-9 bg-black text-white flex items-center justify-center font-bold text-sm tracking-tight dark:bg-white dark:text-black">T5</div>
         <div>
           <div class="font-semibold text-[15px] tracking-tight text-gray-900">TERMOCINQUE</div>
           <div class="text-xs text-gray-400 -mt-0.5">Database Condizionatori</div>
         </div>
       </div>
-      <button id="btnAdmin" class="text-sm font-medium text-gray-600 hover:text-black transition px-3 py-1.5 rounded-lg hover:bg-gray-100">
-        Admin
-      </button>
+      <div class="flex items-center gap-2">
+        <!-- Dark mode switch -->
+        <button id="btnTheme" type="button" title="Modalità notte"
+                class="w-9 h-9 rounded-lg flex items-center justify-center text-gray-600 hover:bg-gray-100 transition dark:text-gray-300 dark:hover:bg-[#1f232b]">
+          <!-- Sun (shown in dark mode) -->
+          <svg id="iconSun" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+          </svg>
+          <!-- Moon (shown in light mode) -->
+          <svg id="iconMoon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+          </svg>
+        </button>
+        <button id="btnAdmin" class="text-sm font-medium text-gray-600 hover:text-black transition px-3 py-1.5 rounded-lg hover:bg-gray-100">
+          Admin
+        </button>
+      </div>
     </div>
   </header>
 
@@ -98,7 +178,7 @@
 
     <div class="mb-10">
       <h1 class="text-2xl font-semibold text-gray-900 tracking-tight">Ricerca dati tecnici</h1>
-      <p class="text-gray-500 mt-1.5 text-[15px]">Seleziona l’unità esterna e poi le unità interne</p>
+      <p class="text-gray-500 mt-1.5 text-[15px]">Seleziona l’unità esterna (e opzionalmente le unità interne)</p>
     </div>
 
     <!-- STEP 1: UNITÀ ESTERNA -->
@@ -116,7 +196,7 @@
         <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
         </svg>
-        <div id="suggestionsEsterna" class="absolute z-30 w-full mt-1.5 bg-white border border-gray-200 rounded-xl shadow-lg hidden max-h-64 overflow-y-auto"></div>
+        <div id="suggestionsEsterna" class="absolute z-30 w-full mt-1.5 bg-white border border-gray-200 rounded-xl shadow-lg hidden max-h-64 overflow-y-auto dark:bg-[#1a1d24] dark:border-[#2d323c]"></div>
       </div>
 
       <div id="selectedEsterna" class="hidden mt-4 p-4 bg-emerald-50 border border-emerald-100 rounded-xl flex items-center justify-between">
@@ -134,7 +214,7 @@
     <div id="step2" class="card p-6 mb-5 opacity-40 pointer-events-none transition-opacity">
       <div class="flex items-center gap-3 mb-4">
         <div class="step-num">2</div>
-        <h2 class="font-semibold text-gray-900 text-[17px]">Unità Interne <span class="text-gray-400 font-normal text-[15px]">(fino a 5)</span></h2>
+        <h2 class="font-semibold text-gray-900 text-[17px]">Unità Interne <span class="text-gray-400 font-normal text-[15px]">(fino a 5 · opzionale)</span></h2>
       </div>
 
       <div id="uiChips" class="flex flex-wrap gap-2 mb-4 min-h-[36px]"></div>
@@ -146,67 +226,67 @@
         <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
         </svg>
-        <div id="suggestionsInterna" class="absolute z-30 w-full mt-1.5 bg-white border border-gray-200 rounded-xl shadow-lg hidden max-h-52 overflow-y-auto"></div>
+        <div id="suggestionsInterna" class="absolute z-30 w-full mt-1.5 bg-white border border-gray-200 rounded-xl shadow-lg hidden max-h-52 overflow-y-auto dark:bg-[#1a1d24] dark:border-[#2d323c]"></div>
       </div>
-      <p class="text-[13px] text-gray-400 mt-2.5">Seleziona le unità una alla volta. L’ordine non è rilevante.</p>
+      <p class="text-[13px] text-gray-400 mt-2.5">Seleziona le unità una alla volta. L’ordine non è rilevante. Se non ne selezioni nessuna vedi solo gas e quantità.</p>
     </div>
 
     <!-- RISULTATO -->
     <div id="resultCard" class="hidden card overflow-hidden">
-      <div class="bg-black text-white px-6 py-5">
-        <div class="text-xs font-medium text-gray-400 uppercase tracking-wider">Combinazione trovata</div>
+      <div class="bg-black text-white px-6 py-5 dark:bg-[#0a0b0e]">
+        <div class="text-xs font-medium text-gray-400 uppercase tracking-wider" id="resSubtitle">Combinazione trovata</div>
         <div id="resTitle" class="text-xl font-semibold mt-1 tracking-tight"></div>
       </div>
       <div class="p-6 grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-5">
-        <div>
+        <div id="fieldMarca">
           <div class="label">Marca</div>
           <div id="resMarca" class="value"></div>
         </div>
-        <div>
+        <div id="fieldEsterna">
           <div class="label">Unità Esterna</div>
           <div id="resEsterna" class="value"></div>
         </div>
-        <div>
+        <div id="fieldInterne">
           <div class="label">Unità Interne</div>
           <div id="resInterne" class="value"></div>
         </div>
-        <div>
+        <div id="fieldGas">
           <div class="label">Tipologia gas</div>
           <div id="resGas" class="value text-emerald-700"></div>
         </div>
-        <div>
+        <div id="fieldQty">
           <div class="label">Quantitativo gas</div>
           <div id="resQty" class="value text-emerald-700"></div>
         </div>
-        <div>
+        <div id="fieldPotenza" class="full-only">
           <div class="label">Potenza riscaldamento</div>
           <div id="resPotenza" class="value"></div>
         </div>
-        <div>
+        <div id="fieldCop" class="full-only">
           <div class="label">COP</div>
           <div id="resCop" class="value"></div>
         </div>
-        <div>
+        <div id="fieldEer" class="full-only">
           <div class="label">EER</div>
           <div id="resEer" class="value"></div>
         </div>
-        <div>
+        <div id="fieldScop" class="full-only">
           <div class="label">SCOP</div>
           <div id="resScop" class="value"></div>
         </div>
-        <div>
+        <div id="fieldSeer" class="full-only">
           <div class="label">SEER</div>
           <div id="resSeer" class="value"></div>
         </div>
-        <div>
+        <div id="fieldDenom" class="full-only">
           <div class="label">Denominazione</div>
           <div id="resDenom" class="value"></div>
         </div>
-        <div>
+        <div id="fieldInvRev" class="full-only">
           <div class="label">Inverter / Reversibile</div>
           <div id="resInvRev" class="value"></div>
         </div>
-        <div>
+        <div id="fieldSup" class="full-only">
           <div class="label">Superficie utile</div>
           <div id="resSup" class="value"></div>
         </div>
@@ -225,7 +305,7 @@
 
   <!-- MODAL LOGIN -->
   <div id="modalLogin" class="fixed inset-0 bg-black/40 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
-    <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-7">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-7 dark:bg-[#1a1d24]">
       <h2 class="text-xl font-semibold text-gray-900 mb-5">Accesso Admin</h2>
       <input id="adminPassword" type="password" placeholder="Password"
              class="w-full border border-gray-200 rounded-xl px-4 py-3.5 mb-5 bg-gray-50" />
@@ -240,13 +320,29 @@
   <!-- MODAL ADMIN -->
   <div id="modalAdmin" class="fixed inset-0 bg-black/40 z-50 hidden overflow-y-auto backdrop-blur-sm">
     <div class="min-h-screen flex items-start justify-center p-4 py-10">
-      <div class="bg-white rounded-2xl shadow-xl w-full max-w-4xl">
+      <div class="bg-white rounded-2xl shadow-xl w-full max-w-4xl dark:bg-[#1a1d24]">
         <div class="px-7 py-5 border-b border-gray-100 flex items-center justify-between">
           <h2 class="text-xl font-semibold text-gray-900">Gestione Database</h2>
           <button id="btnCloseAdmin" class="w-9 h-9 rounded-full hover:bg-gray-100 flex items-center justify-center text-2xl text-gray-400 hover:text-gray-700 transition">&times;</button>
         </div>
 
         <div class="p-7">
+          <!-- Link foglio Google -->
+          <div class="mb-6 p-4 bg-gray-50 rounded-xl border border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <div class="text-sm font-medium text-gray-700">Foglio Google collegato</div>
+              <div class="text-xs text-gray-400 mt-0.5">Modifica direttamente Unita_Esterne e Combinazioni</div>
+            </div>
+            <a href="https://docs.google.com/spreadsheets/d/1oTaDBxl2Ag34z9xCE7DCjwxtTgkFsQY9Lb86Mxx3uAY/edit?usp=sharing"
+               target="_blank" rel="noopener noreferrer"
+               class="inline-flex items-center gap-2 px-4 py-2.5 bg-black text-white rounded-xl text-sm font-medium hover:bg-gray-800 transition shrink-0">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+              </svg>
+              Apri foglio Google
+            </a>
+          </div>
+
           <!-- Stats -->
           <div class="grid grid-cols-2 gap-4 mb-8">
             <div class="p-5 bg-gray-50 rounded-xl">
@@ -278,7 +374,7 @@
               <div class="relative">
                 <input id="addEsternaSearch" type="text" placeholder="Cerca unità esterna…"
                        class="w-full border border-gray-200 rounded-xl px-4 py-3 bg-white" autocomplete="off" />
-                <div id="addEsternaSuggestions" class="absolute z-20 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg hidden max-h-48 overflow-y-auto"></div>
+                <div id="addEsternaSuggestions" class="absolute z-20 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg hidden max-h-48 overflow-y-auto dark:bg-[#1a1d24] dark:border-[#2d323c]"></div>
               </div>
               <div id="addSelectedEsterna" class="hidden mt-2 text-[15px] font-medium text-emerald-700"></div>
             </div>
@@ -353,6 +449,7 @@
 
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbzcoL_Fn0v5EkDrez9SD9h3bPkVwXxUxhbm0gsyN6y6Kzas4nyEofmWeHsFThjzJWEC/exec";
+    const SHEET_URL = "https://docs.google.com/spreadsheets/d/1oTaDBxl2Ag34z9xCE7DCjwxtTgkFsQY9Lb86Mxx3uAY/edit?usp=sharing";
     let esterne = [];
     let combinazioni = [];
     let selectedEsterna = null;
@@ -361,13 +458,29 @@
     let addUIs = [];
     let ADMIN_PASSWORD = "";
 
+    // ===== DARK MODE =====
+    function applyTheme(isDark) {
+      document.documentElement.classList.toggle("dark", isDark);
+      document.getElementById("iconSun").classList.toggle("hidden", !isDark);
+      document.getElementById("iconMoon").classList.toggle("hidden", isDark);
+      localStorage.setItem("t5-theme", isDark ? "dark" : "light");
+    }
+    // Init theme
+    (function () {
+      const saved = localStorage.getItem("t5-theme");
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      applyTheme(saved === "dark" || (!saved && prefersDark));
+    })();
+    document.getElementById("btnTheme").addEventListener("click", () => {
+      applyTheme(!document.documentElement.classList.contains("dark"));
+    });
+
     // ===== UTILS =====
     function fmt(val) {
       if (val === null || val === undefined || val === "" || val === "N/D") return "—";
       const n = Number(val);
       if (isNaN(n)) return String(val);
       return n.toFixed(2).replace(/\.?0+$/, match => match === ".00" ? ".00" : match.replace(/0+$/, "")).replace(/\.$/, "");
-      // sempre max 2 decimali, toglie zeri inutili ma mantiene .00 se intero? meglio forzare 2
     }
     function fmt2(val) {
       if (val === null || val === undefined || val === "" || val === "N/D") return "—";
@@ -520,8 +633,15 @@
     function tryFindCombination() {
       document.getElementById("resultCard").classList.add("hidden");
       document.getElementById("noResult").classList.add("hidden");
-      if (!selectedEsterna || selectedUIs.length === 0) return;
+      if (!selectedEsterna) return;
 
+      // Solo unità esterna → mostra solo gas e quantità dal foglio Unita_Esterne
+      if (selectedUIs.length === 0) {
+        showPartialResult(selectedEsterna);
+        return;
+      }
+
+      // Con unità interne → cerca combinazione completa
       const selectedSorted = [...selectedUIs].map(s => s.trim().toLowerCase()).sort().join("|");
       const match = combinazioni.find(c => {
         if (c["Marca"] !== selectedEsterna["Marca"] || c["Unità Esterna"] !== selectedEsterna["Unità Esterna"]) return false;
@@ -535,8 +655,28 @@
       else document.getElementById("noResult").classList.remove("hidden");
     }
 
+    function setFullFieldsVisible(visible) {
+      document.querySelectorAll(".full-only").forEach(el => {
+        el.style.display = visible ? "" : "none";
+      });
+      // Interne field: hide when partial
+      document.getElementById("fieldInterne").style.display = visible ? "" : "none";
+    }
+
+    function showPartialResult(e) {
+      document.getElementById("resultCard").classList.remove("hidden");
+      document.getElementById("resSubtitle").textContent = "Dati unità esterna";
+      document.getElementById("resTitle").textContent = `${e["Marca"]} ${e["Unità Esterna"]}`;
+      document.getElementById("resMarca").textContent = e["Marca"] || "—";
+      document.getElementById("resEsterna").textContent = e["Unità Esterna"] || "—";
+      document.getElementById("resGas").textContent = e["Tipologia gas"] || "—";
+      document.getElementById("resQty").textContent = e["Quantitativo gas"] || "—";
+      setFullFieldsVisible(false);
+    }
+
     function showResult(c) {
       document.getElementById("resultCard").classList.remove("hidden");
+      document.getElementById("resSubtitle").textContent = "Combinazione trovata";
       document.getElementById("resTitle").textContent = `${c["Marca"]} ${c["Unità Esterna"]} + ${selectedUIs.join(" + ")}`;
       document.getElementById("resMarca").textContent = c["Marca"] || "—";
       document.getElementById("resEsterna").textContent = c["Unità Esterna"] || "—";
@@ -551,6 +691,7 @@
       document.getElementById("resDenom").textContent = c["Denominazione"] || "—";
       document.getElementById("resInvRev").textContent = `${c["Inverter"] || "—"} / ${c["Reversibile"] || "—"}`;
       document.getElementById("resSup").textContent = fmt2(c["Superficie utile"]);
+      setFullFieldsVisible(true);
     }
 
     // ===== ADMIN =====
@@ -566,7 +707,6 @@
     });
     document.getElementById("btnLoginConfirm").addEventListener("click", async () => {
       const pwd = document.getElementById("adminPassword").value;
-      // Semplice test: se la password è sbagliata lo script lo dirà alle azioni successive
       ADMIN_PASSWORD = pwd;
       document.getElementById("modalLogin").classList.add("hidden");
       document.getElementById("modalLogin").classList.remove("flex");
