@@ -522,6 +522,8 @@
     let addUIs = [];
     let ADMIN_PASSWORD = "";
     let hasInternalOptions = false; // true se esistono combinazioni con UI per l'esterna selezionata
+    let lastLoadedAt = 0;
+    const REFRESH_AFTER_MS = 30 * 1000; // ricarica se i dati hanno più di 30 secondi
 
     // ===== DARK MODE =====
     function applyTheme(isDark) {
@@ -591,6 +593,7 @@
         if (res.success) {
           esterne = res.esterne || [];
           combinazioni = res.combinazioni || [];
+          lastLoadedAt = Date.now();
           document.getElementById("countEsterne").textContent = esterne.length;
           document.getElementById("countComb").textContent = combinazioni.length;
         } else {
@@ -602,6 +605,12 @@
       } finally {
         if (showOverlay) setLoading(false);
       }
+    }
+
+    // Ricarica silenziosa se i dati sono vecchi (utile dopo modifiche al foglio Google)
+    async function refreshIfStale() {
+      if (Date.now() - lastLoadedAt < REFRESH_AFTER_MS) return;
+      await loadData(false);
     }
 
     // Restituisce le combinazioni per una data esterna
@@ -625,7 +634,9 @@
     const searchEsterna = document.getElementById("searchEsterna");
     const suggestionsEsterna = document.getElementById("suggestionsEsterna");
 
-    searchEsterna.addEventListener("input", () => {
+    searchEsterna.addEventListener("focus", () => { refreshIfStale(); });
+    searchEsterna.addEventListener("input", async () => {
+      await refreshIfStale();
       const q = searchEsterna.value.trim().toLowerCase();
       if (q.length < 1) { suggestionsEsterna.classList.add("hidden"); return; }
       const matches = esterne.filter(e => {
@@ -671,7 +682,7 @@
         // Ci sono combinazioni multi-split → abilita step 2
         step2.classList.remove("opacity-40", "pointer-events-none", "hidden");
         searchInterna.disabled = false;
-        hint.textContent = "Seleziona le unità una alla volta. L’ordine non è rilevante. Senza interne vedi solo gas e quantità.";
+        hint.textContent = "Le unità interne devono appartenere alla stessa combinazione del foglio. Senza interne vedi solo gas e quantità.";
       } else {
         // Solo esterna (o nessuna combinazione con UI) → nascondi/disabilita step 2
         step2.classList.add("opacity-40", "pointer-events-none");
@@ -697,24 +708,39 @@
     });
 
     // ===== UNITÀ INTERNE =====
+    // Solo UI presenti nelle STESSE righe di Combinazioni compatibili con quelle già scelte
+    function getCompatibleUIs() {
+      if (!selectedEsterna) return [];
+      const selectedLower = selectedUIs.map(s => s.trim().toLowerCase());
+      const possible = new Set();
+      combForEsterna(selectedEsterna)
+        .filter(hasAnyUI)
+        .forEach(c => {
+          const rowUIs = ["UI1","UI2","UI3","UI4","UI5"]
+            .map(k => String(c[k]||"").trim()).filter(Boolean);
+          const rowLower = rowUIs.map(s => s.toLowerCase());
+          // La riga deve contenere TUTTE le UI già selezionate
+          const compatible = selectedLower.every(sel => rowLower.includes(sel));
+          if (!compatible) return;
+          rowUIs.forEach(ui => {
+            if (!selectedUIs.includes(ui)) possible.add(ui);
+          });
+        });
+      return Array.from(possible);
+    }
+
     const searchInterna = document.getElementById("searchInterna");
     const suggestionsInterna = document.getElementById("suggestionsInterna");
 
     searchInterna.addEventListener("input", () => {
       if (!selectedEsterna || !hasInternalOptions) return;
       const q = searchInterna.value.trim().toLowerCase();
-      const possible = new Set();
-      combForEsterna(selectedEsterna)
-        .filter(hasAnyUI)
-        .forEach(c => {
-          ["UI1","UI2","UI3","UI4","UI5"].forEach(k => { if (c[k]) possible.add(String(c[k]).trim()); });
-        });
-      let list = Array.from(possible).filter(ui => !selectedUIs.includes(ui));
+      let list = getCompatibleUIs();
       if (q) list = list.filter(ui => ui.toLowerCase().includes(q));
       list = list.slice(0, 12);
 
       suggestionsInterna.innerHTML = list.length === 0
-        ? `<div class="px-4 py-3 text-gray-400 text-[15px]">Nessuna unità disponibile</div>`
+        ? `<div class="px-4 py-3 text-gray-400 text-[15px]">Nessuna unità compatibile</div>`
         : list.map(ui => `<div class="suggestion-item px-4 py-2.5 cursor-pointer text-[15px]" data-ui="${esc(ui)}">${ui}</div>`).join("");
       suggestionsInterna.classList.remove("hidden");
     });
@@ -974,6 +1000,11 @@
         suggestionsInterna.classList.add("hidden");
       if (!e.target.closest("#addEsternaSearch") && !e.target.closest("#addEsternaSuggestions"))
         addEsternaSuggestions.classList.add("hidden");
+    });
+
+    // Ricarica quando si torna sulla scheda (es. dopo aver modificato il foglio Google)
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") refreshIfStale();
     });
 
     loadData(true);
